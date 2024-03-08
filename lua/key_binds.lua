@@ -1,5 +1,22 @@
 local set = vim.keymap.set;
 
+-- Disable arrow keys #
+set('n', '<Up>', '<Nop<')
+set('n', '<Down>', '<Nop<')
+set('n', '<Left>', '<Nop<')
+set('n', '<Right>', '<Nop<')
+
+set('v', '<Up>', '<Nop<')
+set('v', '<Down>', '<Nop<')
+set('v', '<Left>', '<Nop<')
+set('v', '<Right>', '<Nop<')
+
+set('o', '<Up>', '<Nop<')
+set('o', '<Down>', '<Nop<')
+set('o', '<Left>', '<Nop<')
+set('o', '<Right>', '<Nop<')
+
+
 -- Telescope #
 local builtin = require("telescope.builtin")
 set('n', '<leader>ff', builtin.find_files, {})
@@ -21,6 +38,10 @@ set("v", "y", "\"+y")
 set("n", "p", "\"+p")
 set("v", "p", "\"+p")
 
+-- cut to system clipboard #
+set("n", "c", "\"+c")
+set("v", "c", "\"+c")
+
 -- delete into the void #
 set("n", "d", "\"_d")
 set("v", "d", "\"_d")
@@ -31,8 +52,12 @@ set("n", "Q", "")
 -- replace all words under cursor #
 set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]])
 
--- open nvim-tree #
+--open nvim tree #
 local api = require "nvim-tree.api"
+set("n", "<leader>E", api.tree.open, {})
+
+-- toggle nvim-tree #
+
 set("n", "<leader>n", api.tree.toggle, {})
 
 -- comment out lines #
