@@ -57,7 +57,6 @@ local api = require "nvim-tree.api"
 set("n", "<leader>E", api.tree.open, {})
 
 -- toggle nvim-tree #
-
 set("n", "<leader>n", api.tree.toggle, {})
 
 -- comment out lines #
@@ -72,3 +71,11 @@ set("n", "<leader>tt", function() trouble.toggle("document_diagnostics") end)
 
 -- Terminal #
 set("n", "<leader>T", [[:terminal<CR>i]])
+
+-- Debugging #
+local dap = require("dap")
+set("n", "<leader>db", dap.toggle_breakpoint, {})
+set("n", "<leader>dc", dap.continue, {})
+set("n", "<leader>dn", dap.step_over, {})
+set("n", "<leader>di", dap.step_into, {})
+set("n", "<leader>do", dap.step_out, {})

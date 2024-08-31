@@ -34,3 +34,4 @@ opt.showmode = false
 
 opt.cmdheight = 0
 
+opt.spelllang = "en_us"

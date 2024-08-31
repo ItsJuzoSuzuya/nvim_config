@@ -6,7 +6,21 @@ return { {
       "williamboman/mason.nvim",
       config = function()
         require("mason").setup()
-      end
+      end,
+      opts = {
+        ensure_installed = {
+          "cmake",
+          "clang",
+          "clangd",
+          "rustup",
+          "rust-analyzer",
+          "pyright",
+          "texlab",
+          "lua-language-server",
+          "pylsp",
+          "codelldb",
+        }
+      },
     },
     {
       "williamboman/mason-lspconfig.nvim",
