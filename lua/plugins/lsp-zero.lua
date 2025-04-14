@@ -71,7 +71,6 @@ return { {
       'texlab',
       'pylsp',
       'tsserver',
-      'prettier',
       'docker_compose_language_service',
       'glsl_analyzer',
     })
