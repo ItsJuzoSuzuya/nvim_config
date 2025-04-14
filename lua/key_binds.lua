@@ -31,6 +31,7 @@ set('n', '<C-d>', '<C-d>zz')
 set('n', '<C-u>', '<C-u>zz')
 
 -- copy to system clipboard #
+<<<<<<< HEAD
 set('n', 'y', '"+y')
 set('v', 'y', '"+y')
 
@@ -45,6 +46,22 @@ set('v', 'c', '"+c')
 -- delete into the void #
 set('n', 'd', '"_d')
 set('v', 'd', '"_d')
+=======
+set("n", "y", '"+y')
+set("v", "y", '"+y')
+
+-- paste from system clipboard #
+set("n", "p", '"+p')
+set("v", "p", '"+p')
+
+-- cut to system clipboard #
+set("n", "c", '"+c')
+set("v", "c", '"+c')
+
+-- delete into the void #
+set("n", "d", '"_d')
+set("v", "d", '"_d')
+>>>>>>> f818834 (Fixed system clipboard bindings and added lsp)
 
 -- Dont press Q #
 set('n', 'Q', '')

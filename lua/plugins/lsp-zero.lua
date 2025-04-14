@@ -71,7 +71,9 @@ return { {
       'texlab',
       'pylsp',
       'tsserver',
-      'prettier'
+      'prettier',
+      'docker_compose_language_service',
+      'glsl_analyzer',
     })
     lsp.setup()
     vim.diagnostic.config { virtual_text = true }
