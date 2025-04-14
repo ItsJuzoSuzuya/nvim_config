@@ -3,7 +3,7 @@ return {
         "nvim-treesitter/nvim-treesitter",
         enable = true,
         build = function()
-            require("nvim-treesitter.insatll").update({ with_sync = true })()
+            require("nvim-treesitter.install").update({ with_sync = true })()
         end,
         init = function(plugin)
             require("lazy.core.loader").add_to_rtp(plugin)

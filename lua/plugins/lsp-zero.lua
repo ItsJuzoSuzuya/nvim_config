@@ -69,7 +69,9 @@ return { {
       'lua_ls',
       'clangd',
       'texlab',
-      'pylsp'
+      'pylsp',
+      'tsserver',
+      'prettier'
     })
     lsp.setup()
     vim.diagnostic.config { virtual_text = true }
