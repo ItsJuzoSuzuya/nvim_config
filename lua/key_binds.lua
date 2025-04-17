@@ -79,3 +79,13 @@ set("n", "<leader>dc", dap.continue, {})
 set("n", "<leader>dn", dap.step_over, {})
 set("n", "<leader>di", dap.step_into, {})
 set("n", "<leader>do", dap.step_out, {})
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
+  callback = function(event)
+    local map = function(keys, func)
+      vim.keymap.set("n", keys, func, { buffer = event.buf })
+    end
+    map("<leader>rn", vim.lsp.buf.rename)
+  end
+})
