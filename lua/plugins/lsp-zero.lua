@@ -69,7 +69,10 @@ return { {
       'lua_ls',
       'clangd',
       'texlab',
-      'pylsp'
+      'pylsp',
+      'tsserver',
+      'docker_compose_language_service',
+      'glsl_analyzer',
     })
     lsp.setup()
     vim.diagnostic.config { virtual_text = true }
