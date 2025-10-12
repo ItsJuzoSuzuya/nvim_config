@@ -27,7 +27,6 @@ dap.adapters.cpp = {
   command = 'gdb',
   name = 'gdb',
 }
-
 dap.configurations.cpp = {
   {
     name = "Launch with gdb",

@@ -82,6 +82,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
     map("<leader>rn", vim.lsp.buf.rename)
   end
 })
+
+local dap = require('dap')
 set('n', '<leader>db', dap.toggle_breakpoint, {})
 set('n', '<leader>dc', dap.continue, {})
 set('n', '<leader>dn', dap.step_over, {})
