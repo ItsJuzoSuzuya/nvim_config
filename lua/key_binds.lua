@@ -73,7 +73,15 @@ set('n', '<leader>tt', function() trouble.toggle('document_diagnostics') end)
 set('n', '<leader>T', [[:terminal<CR>i]])
 
 -- Debugging #
-local dap = require('dap')
+vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
+  callback = function(event)
+    local map = function(keys, func)
+      vim.keymap.set("n", keys, func, { buffer = event.buf })
+    end
+    map("<leader>rn", vim.lsp.buf.rename)
+  end
+})
 set('n', '<leader>db', dap.toggle_breakpoint, {})
 set('n', '<leader>dc', dap.continue, {})
 set('n', '<leader>dn', dap.step_over, {})
