@@ -4,30 +4,27 @@ return { {
     'neovim/nvim-lspconfig',
     {
       'williamboman/mason.nvim',
-      config = function()
-        require('mason').setup()
-      end,
       opts = {
         ensure_installed = {
           'cmake',
           'clangd',
           'rustup',
-          'rust-analyzer',
           'pyright',
           'texlab',
-          'lua-language-server',
-          'codelldb',
           'docker_compose_language_service',
           'dockerls',
           'intelephense',
           'zls',
         }
       },
+      config = function(_, opts)
+        require('mason').setup()
+        require('mason-lspconfig').setup({ ensure_installed = opts.ensure_installed })
+      end,
     },
     {
       'williamboman/mason-lspconfig.nvim',
     },
-
     -- Autocompletion
     {
       'onsails/lspkind-nvim',
@@ -42,8 +39,6 @@ return { {
         local cmp = require('cmp')
         local lspkind = require('lspkind')
 
-        local FIXED_WIDTH = 40 -- completion entry width
-
         cmp.setup({
           window = {
             completion = cmp.config.window.bordered({
@@ -55,7 +50,7 @@ return { {
             }),
             documentation = cmp.config.window.bordered({
               border = 'rounded',
-              max_width = 80,
+              max_width = 60,
               max_height = 20,
               winhighlight = 'Normal:Pmenu,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None',
             }),
@@ -85,13 +80,12 @@ return { {
                 table.insert(doc_lines, docstring)
               end
 
-              -- Add visible separator line if we have both docstring and params
-              if docstring ~= "" and params and params ~= "" then
-                table.insert(doc_lines, "\n---\n")
-              end
-
               -- Pretty parameters
-              if fname and params and params ~= "" then
+              if fname and params and params ~= "" and not docstring:match("[Pp]arameters?:") then
+                -- Add visible separator line if we have both docstring and params
+                if docstring ~= "" and params and params ~= "" then
+                  table.insert(doc_lines, "\n---\n")
+                end
                 table.insert(doc_lines, "**Parameters:**")
 
                 for param in params:gmatch("[^,]+") do
@@ -145,10 +139,12 @@ return { {
   },
   config = function()
     local lsp = require('lsp-zero')
+
     lsp.on_attach(function(client, bufnr)
       require('lsp-format').on_attach(client, bufnr)
       lsp.default_keymaps({ buffer = bufnr })
     end)
+
     require('lspconfig').pyright.setup({
       settings = {
         python = {
@@ -156,13 +152,21 @@ return { {
         }
       }
     })
+
     require('lspconfig').intelephense.setup({
       root_dir = function(fname)
         return require('lspconfig').util.root_pattern('composer.json', '.git')(fname) or
             require('lspconfig').util.path.dirname(fname)
       end,
-
+      settings = {
+        intelephense = {
+          files = {
+            maxSize = 5000000,
+          },
+        },
+      },
     })
+
     lsp.setup_servers({
       'cmake',
       'pyright',
@@ -170,25 +174,25 @@ return { {
       'lua_ls',
       'clangd',
       'texlab',
-      'ts_ls',
+      'tsserver',
       'docker_compose_language_service',
       'dockerls',
+      'tailwindcss',
+      'volar',
+      'eslint',
       'glsl_analyzer',
       'intelephense',
       'zls',
     })
 
-    lsp.configure('intelephense', {
-      settings = {
-        intelephense = {
-          files = {
-            maxSize = 5000000
-          }
-        }
-      }
+    lsp.configure('volar', {
+      filetypes = { 'vue', 'typescript', 'javascript', 'javascriptreact', 'typescriptreact' },
     })
 
-    lsp.setup()
+    lsp.configure('tailwindcss', {
+      filetypes = { 'html', 'vue', 'typescriptreact', 'javascriptreact', 'css' },
+    })
+
     lsp.configure('clangd', {
       cmd = {
         'clangd',
@@ -198,6 +202,12 @@ return { {
       },
       root_dir = require('lspconfig').util.root_pattern('compile_commands.json', '.git'),
     })
-    vim.diagnostic.config { virtual_text = true }
+
+
+    lsp.setup()
+    vim.diagnostic.config {
+      virtual_text = true,
+      float = { border = 'rounded' },
+    }
   end
 } }

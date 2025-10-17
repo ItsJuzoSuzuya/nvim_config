@@ -66,8 +66,10 @@ set('v', '<leader>#', [[:s/^/]])
 set('n', '<leader>a', vim.lsp.buf.code_action, {})
 
 -- Trouble #
-local trouble = require('trouble')
-set('n', '<leader>tt', function() trouble.toggle('document_diagnostics') end)
+set('n', '<leader>tt', function()
+  -- Document diagnostics (current buffer)
+  require('trouble').toggle({ mode = 'diagnostics', focus = true, filter = { buf = 0 } })
+end, { desc = 'Trouble: Document diagnostics' })
 
 -- Terminal #
 set('n', '<leader>T', [[:terminal<CR>i]])
