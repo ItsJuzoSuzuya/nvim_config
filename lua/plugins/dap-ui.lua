@@ -6,7 +6,7 @@ return {
     "nvim-neotest/nvim-nio"
   },
   opts = {},
-  config = function()
+  config = function(_, opts)
     local dap = require('dap')
     local dapui = require('dapui')
 

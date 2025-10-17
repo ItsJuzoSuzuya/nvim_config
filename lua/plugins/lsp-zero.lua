@@ -4,22 +4,28 @@ return { {
     'neovim/nvim-lspconfig',
     {
       'williamboman/mason.nvim',
-      opts = {
-        ensure_installed = {
-          'cmake',
-          'clangd',
-          'rustup',
-          'pyright',
-          'texlab',
-          'docker_compose_language_service',
-          'dockerls',
-          'intelephense',
-          'zls',
-        }
-      },
-      config = function(_, opts)
+      opts = {},
+      config = function(_, _)
         require('mason').setup()
-        require('mason-lspconfig').setup({ ensure_installed = opts.ensure_installed })
+        require('mason-lspconfig').setup({
+          ensure_installed = {
+            'cmake',
+            'clangd',
+            'pyright',
+            'texlab',
+            'docker_compose_language_service',
+            'dockerls',
+            'intelephense',
+            'zls',
+            'lua_ls',
+            'ts_ls',  -- tsserver -> ts_ls
+            'tailwindcss',
+            'vue_ls', -- volar -> vue_ls
+            'eslint',
+            'glsl_analyzer',
+            'rust_analyzer',
+          }
+        })
       end,
     },
     {
@@ -62,27 +68,20 @@ return { {
               local documentation = entry.completion_item.documentation
               local docstring = ""
 
-              -- Extract docstring
               if type(documentation) == "string" then
                 docstring = documentation
               elseif type(documentation) == "table" and documentation.value then
                 docstring = documentation.value
               end
 
-              -- Extract function name and parameters from label
               local fname, params = label:match("([%w_]+)%s*%((.*)%)")
-
-              -- Build documentation lines
               local doc_lines = {}
 
-              -- Add docstring if present
               if docstring ~= "" then
                 table.insert(doc_lines, docstring)
               end
 
-              -- Pretty parameters
               if fname and params and params ~= "" and not docstring:match("[Pp]arameters?:") then
-                -- Add visible separator line if we have both docstring and params
                 if docstring ~= "" and params and params ~= "" then
                   table.insert(doc_lines, "\n---\n")
                 end
@@ -99,7 +98,6 @@ return { {
                 value = table.concat(doc_lines, "\n")
               }
 
-              -- Keep icons
               vim_item.kind = lspkind.symbolic(vim_item.kind, { mode = "symbol_text" })
 
               return vim_item
@@ -139,13 +137,14 @@ return { {
   },
   config = function()
     local lsp = require('lsp-zero')
+    local util = require('lspconfig.util')
 
     lsp.on_attach(function(client, bufnr)
       require('lsp-format').on_attach(client, bufnr)
       lsp.default_keymaps({ buffer = bufnr })
     end)
 
-    require('lspconfig').pyright.setup({
+    lsp.configure('pyright', {
       settings = {
         python = {
           pythonPath = '/home/nick/.local/share/pipx/venvs/pip/bin/python'
@@ -153,10 +152,9 @@ return { {
       }
     })
 
-    require('lspconfig').intelephense.setup({
+    lsp.configure('intelephense', {
       root_dir = function(fname)
-        return require('lspconfig').util.root_pattern('composer.json', '.git')(fname) or
-            require('lspconfig').util.path.dirname(fname)
+        return util.root_pattern('composer.json', '.git')(fname) or util.path.dirname(fname)
       end,
       settings = {
         intelephense = {
@@ -174,19 +172,15 @@ return { {
       'lua_ls',
       'clangd',
       'texlab',
-      'tsserver',
+      'ts_ls', -- updated
       'docker_compose_language_service',
       'dockerls',
       'tailwindcss',
-      'volar',
+      'vue_ls', -- updated
       'eslint',
       'glsl_analyzer',
       'intelephense',
       'zls',
-    })
-
-    lsp.configure('volar', {
-      filetypes = { 'vue', 'typescript', 'javascript', 'javascriptreact', 'typescriptreact' },
     })
 
     lsp.configure('tailwindcss', {
@@ -200,9 +194,8 @@ return { {
         '--header-insertion=never',
         '--all-scopes-completion',
       },
-      root_dir = require('lspconfig').util.root_pattern('compile_commands.json', '.git'),
+      root_dir = util.root_pattern('compile_commands.json', '.git'),
     })
-
 
     lsp.setup()
     vim.diagnostic.config {

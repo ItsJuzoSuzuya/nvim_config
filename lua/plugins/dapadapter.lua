@@ -6,14 +6,16 @@ return {
     "mfussenegger/nvim-dap",
   },
   opts = {
-    ensure_installed = { "cpptools" }, -- mason name for vscode-cpptools adapter
+    ensure_installed = { "cpptools" }, -- mason name for VSCode C++ adapter
     handlers = {
       function(config)
-        -- All default handlers get passed here
+        -- Default handlers
         require("mason-nvim-dap").default_setup(config)
       end,
-      cpp = function()
+      -- The handler key must match the Mason DAP source name
+      cpptools = function()
         local dap = require("dap")
+        -- Using GDB's native DAP
         dap.adapters.cpp = {
           type = "executable",
           command = "gdb",
