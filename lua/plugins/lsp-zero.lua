@@ -33,12 +33,13 @@ return {{
         "intelephense",
         "zls",
         "lua_ls",
-        "ts_ls",       -- tsserver -> ts_ls
+        "angularls",
+        "ts_ls",
         "tailwindcss",
-        "vue_ls",      -- volar -> vue_ls
         "eslint",
         "glsl_analyzer",
         "rust_analyzer",
+        "html",
       },
       handlers = {
         -- Default handler for all servers
@@ -66,6 +67,16 @@ return {{
           })
         end,
 
+        angularls = function()
+          lspconfig.angularls.setup({
+            capabilities = require("cmp_nvim_lsp").default_capabilities(),
+            on_attach = function(client, bufnr)
+              require("lsp-format").on_attach(client, bufnr)
+            end,
+            root_dir = require("lspconfig.util").root_pattern("angular.json", "project.json", "package.json", ".git"),
+          })
+        end,
+
         intelephense = function()
           lspconfig.intelephense.setup({
             capabilities = require("cmp_nvim_lsp").default_capabilities(),
@@ -90,6 +101,16 @@ return {{
               require("lsp-format").on_attach(client, bufnr)
             end,
             filetypes = { "html", "vue", "typescriptreact", "javascriptreact", "css" },
+          })
+        end,
+
+        html = function()
+          lspconfig.html.setup({
+            capabilities = require("cmp_nvim_lsp").default_capabilities(),
+            on_attach = function(client, bufnr)
+              require("lsp-format").on_attach(client, bufnr)
+            end,
+            filetypes = { "html", "vue" },
           })
         end,
 
@@ -124,24 +145,32 @@ return {{
 
     cmp.setup({
       window = {
-        completion = cmp.config.window.bordered({
+        completion = {
           border = "rounded",
           scrollbar = true,
           side_padding = 1,
           col_offset = -3,
+          max_width = 40,
           winhighlight = "Normal:Pmenu,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
-        }),
-        documentation = cmp.config.window.bordered({
+        },
+        documentation = {
           border = "rounded",
-          max_width = 60,
-          max_height = 20,
+          min_width = 40,
+          max_width = 100,
+          max_height = 40,
           winhighlight = "Normal:Pmenu,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
-        }),
+        },
       },
       formatting = {
         fields = { "kind", "abbr", "menu" },
         format = function(entry, vim_item)
-          local label = vim_item.abbr
+          -- Truncate the completion item to limit width
+          local max_width = 40
+          if vim_item.abbr and #vim_item.abbr > max_width then
+            vim_item.abbr = vim_item.abbr:sub(1, max_width - 1) .. "…"
+          end
+
+          local label = vim_item. abbr
           local documentation = entry.completion_item.documentation
           local docstring = ""
 
@@ -151,14 +180,14 @@ return {{
             docstring = documentation.value
           end
 
-          local fname, params = label:match("([%w_]+)%s*%((.*)%)")
+          local fname, params = label: match("([%w_]+)%s*%((. *)%)")
           local doc_lines = {}
 
           if docstring ~= "" then
             table.insert(doc_lines, docstring)
           end
 
-          if fname and params and params ~= "" and not docstring:match("[Pp]arameters?:") then
+          if fname and params and params ~= "" and not docstring: match("[Pp]arameters? : ") then
             if docstring ~= "" and params and params ~= "" then
               table.insert(doc_lines, "\n---\n")
             end
@@ -170,12 +199,12 @@ return {{
             end
           end
 
-          entry.completion_item.documentation = {
+          entry. completion_item.documentation = {
             kind = "markdown",
-            value = table.concat(doc_lines, "\n"),
+            value = table. concat(doc_lines, "\n"),
           }
 
-          vim_item.kind = lspkind.symbolic(vim_item.kind, { mode = "symbol_text" })
+          vim_item.kind = lspkind.symbolic(vim_item. kind, { mode = "symbol_text" })
           return vim_item
         end,
       },
