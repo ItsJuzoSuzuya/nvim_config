@@ -1,31 +1,33 @@
 return {
-    {
-        "nvim-treesitter/nvim-treesitter",
-        enable = true,
-        build = function()
-            require("nvim-treesitter.install").update({ with_sync = true })()
-        end,
-        init = function(plugin)
-            require("lazy.core.loader").add_to_rtp(plugin)
-            require("nvim-treesitter.query_predicates")
-        end,
-        config = function()
-            require("nvim-treesitter.configs").setup {
-                ensure_installed = { "lua", "c", "rust", "markdown", "java" },
-
-                auto_install = true,
-                indent = { enable = true },
-                incremental_selection = { enable = false },
-            }
-        end,
-        dependencies = {
-            { "nvim-treesitter/nvim-treesitter-textobjects", {} },
-            {
-                "nvim-treesitter/nvim-treesitter-context",
-                opts = {
-                    mode = "cursor", max_lines = 3
-                },
-            },
-        }
-    }
+  {
+    "nvim-treesitter/nvim-treesitter",
+    enabled = true,
+    build = ":TSUpdate",
+    event = { "BufReadPost", "BufNewFile" },
+    dependencies = {
+      "nvim-treesitter/nvim-treesitter-textobjects",
+      {
+        "nvim-treesitter/nvim-treesitter-context",
+        opts = {
+          mode = "cursor",
+          max_lines = 3,
+        },
+      },
+    },
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = {
+          "lua",
+          "c",
+          "rust",
+          "markdown",
+          "java",
+        },
+        auto_install = true,
+        highlight = { enable = true },
+        indent = { enable = true },
+        incremental_selection = { enable = false },
+      })
+    end,
+  },
 }
