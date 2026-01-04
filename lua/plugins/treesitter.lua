@@ -9,8 +9,8 @@ return {
     dependencies = {
       -- disabled/lazy so they don't get sourced before treesitter
       -- remove the following entries if you don't want them at all
-      { "nvim-treesitter/nvim-treesitter-textobjects", enabled = false, lazy = true },
-      { "nvim-treesitter/nvim-treesitter-context", enabled = false, lazy = true },
+      { "nvim-treesitter/nvim-treesitter-textobjects", lazy = true },
+      { "nvim-treesitter/nvim-treesitter-context", lazy = true },
     },
     config = function()
       -- make sure the plugin runtime is added so require() can find lua modules
