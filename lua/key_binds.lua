@@ -31,12 +31,12 @@ set('n', '<C-d>', '<C-d>zz')
 set('n', '<C-u>', '<C-u>zz')
 
 -- copy to system clipboard #
-set('n', 'y', '"+y')
-set('v', 'y', '"+y')
+set('n', 'y', '"+y', {noremap = true, silent = true})
+set('v', 'y', '"+y', {noremap = true, silent = true})
 
 -- paste from system clipboard #
-set('n', 'p', '"+p')
-set('v', 'p', '"+p')
+set('n', 'p', '"+p', {noremap = true, silent = true})
+set('v', 'p', '"+p', {noremap = true, silent = true})
 
 -- cut to system clipboard #
 set('n', 'c', '"+c')

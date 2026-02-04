@@ -40,6 +40,8 @@ return {{
         "glsl_analyzer",
         "rust_analyzer",
         "html",
+        "golangci_lint_ls",
+        "gopls"
       },
       handlers = {
         -- Default handler for all servers
