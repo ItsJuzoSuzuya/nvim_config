@@ -34,7 +34,7 @@ return {{
         "zls",
         "lua_ls",
         "angularls",
-        "ts_ls",
+        "tsserver",
         "tailwindcss",
         "eslint",
         "glsl_analyzer",
@@ -131,8 +131,20 @@ return {{
             root_dir = util.root_pattern("compile_commands.json", ".git"),
           })
         end,
+
+        docker_compose_language_service = function()
+          lspconfig.docker_compose_language_service.setup({
+            capabilities = require("cmp_nvim_lsp").default_capabilities(),
+            on_attach = function(client, bufnr)
+              require("lsp-format").on_attach(client, bufnr)
+            end,
+          })
+        end,
       },
-    })
+
+
+
+    });
 
     -- Diagnostics UI
     vim.diagnostic.config({

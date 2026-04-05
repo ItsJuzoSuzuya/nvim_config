@@ -18,9 +18,9 @@ set('o', '<Right>', '<Nop<')
 
 
 -- Telescope #
-local builtin = require('telescope.builtin')
-set('n', '<leader>ff', builtin.find_files, {})
-set('n', '<leader>fg', builtin.live_grep, {})
+local telescope = require('telescope.builtin')
+set('n', '<leader>ff', telescope.find_files, {})
+set('n', '<leader>fg', telescope.live_grep, {})
 
 -- Move text up/down #
 set('v', 'J', ':m ">+1<CR>gv=gv')
@@ -81,7 +81,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local map = function(keys, func)
       vim.keymap.set("n", keys, func, { buffer = event.buf })
     end
+
     map("<leader>rn", vim.lsp.buf.rename)
+
+    map("gd", telescope.lsp_definitions)
+    map("gi", telescope.lsp_implementations)
+    map("gr", telescope.lsp_references)
+    map("gD", telescope.lsp_type_definitions)
   end
 })
 

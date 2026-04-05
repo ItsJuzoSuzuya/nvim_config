@@ -1,5 +1,5 @@
 return{
-	{"nvim-telescope/telescope.nvim", 
+	{"nvim-telescope/telescope.nvim",
 		config = function()
 			require("telescope").setup {
 				defaults = { file_ignore_patterns = {"node_modules"} },
@@ -17,8 +17,8 @@ return{
 			}
 		end,
 
-		dependencies = { 
-			'nvim-lua/plenary.nvim',  
+		dependencies = {
+			'nvim-lua/plenary.nvim',
 			{"nvim-telescope/telescope-fzf-native.nvim",
 				build = "make",
 				config = function()
@@ -30,6 +30,6 @@ return{
 					require("telescope").load_extension("ui-select")
 				end,
 			},
-		},	
+		},
 	}
 }
