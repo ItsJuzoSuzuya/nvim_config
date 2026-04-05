@@ -85,6 +85,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
   end
 })
 
+-- Neovim # 
+set("n", "<leader>gg", "<cmd>Neogit<CR>", {
+  desc = "Neogit: Open Neogit"
+})
+
 local dap = require('dap')
 set('n', '<leader>db', dap.toggle_breakpoint, {})
 set('n', '<leader>dc', dap.continue, {})
