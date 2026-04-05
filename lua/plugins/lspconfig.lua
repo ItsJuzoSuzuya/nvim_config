@@ -127,6 +127,7 @@ return {{
               "--compile-commands-dir=build",
               "--header-insertion=never",
               "--all-scopes-completion",
+              "--experimental-modules-support"
             },
             root_dir = util.root_pattern("compile_commands.json", ".git"),
           })
