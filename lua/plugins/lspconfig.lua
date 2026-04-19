@@ -25,7 +25,6 @@ return {{
     require("mason-lspconfig").setup({
       ensure_installed = {
         "cmake",
-        "clangd",
         "pyright",
         "texlab",
         "docker_compose_language_service",
@@ -34,7 +33,6 @@ return {{
         "zls",
         "lua_ls",
         "angularls",
-        "tsserver",
         "tailwindcss",
         "eslint",
         "glsl_analyzer",
@@ -123,7 +121,7 @@ return {{
               require("lsp-format").on_attach(client, bufnr)
             end,
             cmd = {
-              "clangd",
+              "/usr/bin/clangd",
               "--compile-commands-dir=build",
               "--header-insertion=never",
               "--all-scopes-completion",
